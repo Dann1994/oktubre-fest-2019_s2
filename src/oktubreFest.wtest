@@ -1,0 +1,276 @@
+import Cervezas.*
+import Jarras.*
+import Personas.*
+import Carpas.*
+
+describe "Oktobre fest" {
+
+	/**Cervezas */
+	const corona  = new Rubia(lupuo = 6, graduacion = 0.05, pais = "Mexico")
+	const guinness = new Negra(lupuo = 8, pais = "Irlanda")
+	const hofbrau = new Roja(lupuo = 6, pais = "Alemania") 
+	
+	/**personas*/
+	const belgaJoven = new Belga(peso = 65, leGustaMasicaTradicional = false, nivelDeAguante = 80)
+	const belga  = new Belga(peso = 85, leGustaMasicaTradicional = true, nivelDeAguante = 90)
+	const checoJoven  = new Checo(peso = 75, leGustaMasicaTradicional = true, nivelDeAguante = 60)
+	const checo  = new Checo(peso = 68, leGustaMasicaTradicional = false, nivelDeAguante = 50)
+	const alemanJoven = new Aleman(peso = 80, leGustaMasicaTradicional = true, nivelDeAguante = 90, minimoDeGenteEnCarpa = 0)
+	const aleman = new Aleman(peso = 98, leGustaMasicaTradicional = true, nivelDeAguante = 100, minimoDeGenteEnCarpa = 1)
+	
+	/**Jarras */
+	const jarraCoronaChica  = new Jarra(capasidadLts = 1, marca = corona)
+	const jarraCoronaMedia = new Jarra(capasidadLts = 1.50, marca = corona)
+	
+	const jarraGuinnessChica  = new Jarra(capasidadLts = 0.50, marca = guinness)
+	const jarraGuinnessGrande = new Jarra(capasidadLts = 2, marca = guinness)
+	
+	const jarraHofbrauMedia  = new Jarra(capasidadLts = 1.50, marca = hofbrau)
+	const jarraHofbrauGrande = new Jarra(capasidadLts = 2.25, marca = hofbrau)
+	
+	/**Carpas */
+	const carpaCorona = new Carpa(limiteDeGente = 15, bandaDeMusicaTradicional = false, marca = corona)
+	const carpaGuinness = new Carpa(limiteDeGente = 20, bandaDeMusicaTradicional = false, marca = guinness)
+	const carpaHofbrau = new Carpa(limiteDeGente = 35, bandaDeMusicaTradicional = true, marca = hofbrau)
+	
+	fixture {
+        
+        belgaJoven.entrarEnCarpa(carpaCorona)
+        belgaJoven.entrarEnCarpa(carpaGuinness)
+        
+		belga.entrarEnCarpa(carpaHofbrau)
+		
+		checoJoven.entrarEnCarpa(carpaHofbrau)
+		checo.entrarEnCarpa(carpaGuinness)
+		
+		alemanJoven.entrarEnCarpa(carpaHofbrau)
+		
+		aleman.entrarEnCarpa(carpaHofbrau)
+		
+		
+		assert.throwsException {
+			belgaJoven.entrarEnCarpa(carpaHofbrau)
+			
+		    belga.entrarEnCarpa(carpaCorona)
+		    belga.entrarEnCarpa(carpaGuinness)
+		    
+		    checo.entrarEnCarpa(carpaCorona)
+		    checo.entrarEnCarpa(carpaHofbrau)
+		   
+		    alemanJoven.entrarEnCarpa(carpaCorona)
+		    alemanJoven.entrarEnCarpa(carpaGuinness)
+		    
+		    aleman.entrarEnCarpa(carpaCorona)
+		    aleman.entrarEnCarpa(carpaGuinness)
+		}
+		
+		carpaCorona.servirJarraDe_LtsA(1, belgaJoven)
+		
+		carpaHofbrau.servirJarraDe_LtsA(1, belga)
+		carpaHofbrau.servirJarraDe_LtsA(1, belga)
+		
+		carpaGuinness.servirJarraDe_LtsA(2, checo)
+		carpaGuinness.servirJarraDe_LtsA(1, checo)
+		
+		carpaHofbrau.servirJarraDe_LtsA(1.50, aleman)
+		carpaHofbrau.servirJarraDe_LtsA(2.25, aleman)
+		carpaHofbrau.servirJarraDe_LtsA(2.25, aleman)
+		carpaHofbrau.servirJarraDe_LtsA(2.25, aleman)
+		carpaHofbrau.servirJarraDe_LtsA(2.25, aleman)
+	}
+	
+	test "Contenido de alcohol" {
+		assert.equals(0.05,jarraCoronaChica.contenidoDeAlcohol())
+		assert.equals(0.075,jarraCoronaMedia.contenidoDeAlcohol())
+		
+		assert.equals(0.075,jarraGuinnessChica.contenidoDeAlcohol())
+		assert.equals(0.3,jarraGuinnessGrande.contenidoDeAlcohol())
+		
+		assert.equals(0.28125,jarraHofbrauMedia.contenidoDeAlcohol())
+		assert.equals(0.42188,jarraHofbrauGrande.contenidoDeAlcohol())
+	}
+	
+	test "Total de acohol ingerido" {
+		
+		assert.equals(0.05,belgaJoven.alcohoInegrido())
+		
+		assert.equals(0.375,belga.alcohoInegrido())
+		
+		assert.equals(0,checoJoven.alcohoInegrido())
+		
+		assert.equals(0.45,checo.alcohoInegrido())
+		
+		assert.equals(0,alemanJoven.alcohoInegrido())
+		
+		assert.equals(1.96877,aleman.alcohoInegrido())
+	}
+	
+	test "Está ebrio" {
+		
+		assert.equals(false,belgaJoven.estaEbrio())
+		
+		assert.equals(false,belga.estaEbrio())
+		
+		assert.equals(false,checoJoven.estaEbrio())
+		
+		assert.equals(false,checo.estaEbrio())
+		
+		assert.equals(false,alemanJoven.estaEbrio())
+		
+		assert.equals(true,aleman.estaEbrio())
+	}
+	
+	test "Le gusta esta marca" {
+		assert.equals(true,belgaJoven.leGustaMarca(corona))
+		assert.equals(true,belgaJoven.leGustaMarca(guinness))
+		assert.equals(true,belgaJoven.leGustaMarca(hofbrau))
+		
+		assert.equals(true,belga.leGustaMarca(corona))
+		assert.equals(true,belga.leGustaMarca(guinness))
+		assert.equals(true,belga.leGustaMarca(hofbrau))
+		
+		assert.equals(false,checoJoven.leGustaMarca(corona))
+		assert.equals(true,checoJoven.leGustaMarca(guinness))
+		assert.equals(true,checoJoven.leGustaMarca(hofbrau))
+		
+		assert.equals(false,checo.leGustaMarca(corona))
+		assert.equals(true,checo.leGustaMarca(guinness))
+		assert.equals(true,checo.leGustaMarca(hofbrau))
+		
+		assert.equals(true,alemanJoven.leGustaMarca(corona))
+		assert.equals(true,alemanJoven.leGustaMarca(guinness))
+		assert.equals(true,alemanJoven.leGustaMarca(hofbrau))
+		
+		assert.equals(true,aleman.leGustaMarca(corona))
+		assert.equals(true,aleman.leGustaMarca(guinness))
+		assert.equals(true,aleman.leGustaMarca(hofbrau))
+	}
+	
+	test "Quiere entrar en la carpa" {
+		
+		assert.equals(false,belga.quiereEntrarACarpa(carpaCorona))
+		assert.equals(false,belga.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(true,belga.quiereEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(true,belgaJoven.quiereEntrarACarpa(carpaCorona))
+		assert.equals(true,belgaJoven.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(false,belgaJoven.quiereEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,checo.quiereEntrarACarpa(carpaCorona))
+		assert.equals(true,checo.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(false,checo.quiereEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,checoJoven.quiereEntrarACarpa(carpaCorona))
+		assert.equals(false,checoJoven.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(true,checoJoven.quiereEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,aleman.quiereEntrarACarpa(carpaCorona))
+		assert.equals(false,aleman.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(true,aleman.quiereEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,alemanJoven.quiereEntrarACarpa(carpaCorona))
+		assert.equals(false,alemanJoven.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(true,alemanJoven.quiereEntrarACarpa(carpaHofbrau))
+		
+	}
+	
+	test "Deja entrar a una carpa" {
+		
+		assert.equals(true,carpaCorona.dejaEntrarA(belgaJoven))
+		assert.equals(true,carpaCorona.dejaEntrarA(checoJoven))
+		assert.equals(true,carpaCorona.dejaEntrarA(alemanJoven))
+		
+		assert.equals(true,carpaCorona.dejaEntrarA(belga))
+		assert.equals(true,carpaCorona.dejaEntrarA(checo))
+		assert.equals(false,carpaCorona.dejaEntrarA(aleman))
+		
+		assert.equals(true,carpaGuinness.dejaEntrarA(belgaJoven))
+		assert.equals(true,carpaGuinness.dejaEntrarA(checoJoven))
+		assert.equals(true,carpaGuinness.dejaEntrarA(alemanJoven))
+		
+		assert.equals(true,carpaGuinness.dejaEntrarA(belga))
+		assert.equals(true,carpaGuinness.dejaEntrarA(checo))
+		assert.equals(false,carpaGuinness.dejaEntrarA(aleman))
+		
+		assert.equals(true,carpaHofbrau.dejaEntrarA(belgaJoven))
+		assert.equals(true,carpaHofbrau.dejaEntrarA(checoJoven))
+		assert.equals(true,carpaHofbrau.dejaEntrarA(alemanJoven))
+		
+		assert.equals(true,carpaHofbrau.dejaEntrarA(belga))
+		assert.equals(true,carpaHofbrau.dejaEntrarA(checo))
+		assert.equals(false,carpaHofbrau.dejaEntrarA(aleman))
+	}
+	
+	test "Puede entrar a una carpa" {
+		assert.equals(true,belgaJoven.puedeEntrarACarpa(carpaCorona))
+		assert.equals(true,belgaJoven.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(false,belgaJoven.puedeEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,belga.puedeEntrarACarpa(carpaCorona))
+		assert.equals(false,belga.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(true,belga.puedeEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,checoJoven.puedeEntrarACarpa(carpaCorona))
+		assert.equals(false,checoJoven.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(true,checoJoven.puedeEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,checo.puedeEntrarACarpa(carpaCorona))
+		assert.equals(true,checo.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(false,checo.puedeEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,alemanJoven.puedeEntrarACarpa(carpaCorona))
+		assert.equals(false,alemanJoven.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(true,alemanJoven.puedeEntrarACarpa(carpaHofbrau))
+		
+		assert.equals(false,aleman.puedeEntrarACarpa(carpaCorona))
+		assert.equals(false,aleman.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(false,aleman.puedeEntrarACarpa(carpaHofbrau))
+	}
+	
+	test "Es patriota" {
+		
+		assert.equals(false,belgaJoven.esPatriota())
+		assert.equals(true,checoJoven.esPatriota())
+		assert.equals(true,alemanJoven.esPatriota())
+		assert.equals(false,belga.esPatriota())
+		assert.equals(false,checo.esPatriota())
+		assert.equals(true,aleman.esPatriota())
+	} 
+	
+	test "Son compatibles" {
+		assert.equals(false,belga.esCompatibleCon(checo))
+		assert.equals(true,belga.esCompatibleCon(aleman))
+		assert.equals(false,checo.esCompatibleCon(aleman))
+	}
+	
+	test "Es homegénea" {
+		assert.equals(true,carpaCorona.esHomogenea()) 
+		assert.equals(false,carpaGuinness.esHomogenea())
+		assert.equals(false,carpaHofbrau.esHomogenea())
+	}
+	
+	test "En que carpas les sirvieron" {
+		assert.equals(#{carpaCorona},belgaJoven.carpasDondeBebio())
+		assert.equals(#{},checoJoven.carpasDondeBebio())
+		assert.equals(#{},alemanJoven.carpasDondeBebio())
+		assert.equals(#{carpaHofbrau},belga.carpasDondeBebio())
+		assert.equals(#{carpaGuinness},checo.carpasDondeBebio())
+		assert.equals(#{carpaHofbrau},aleman.carpasDondeBebio())
+	}
+	
+	test "Asistentes que no bebieron en la carpa" {
+		assert.equals(#{},carpaCorona.asistentesQueNoBebieron())
+		assert.equals(#{belgaJoven},carpaGuinness.asistentesQueNoBebieron())
+		assert.equals(#{checoJoven,alemanJoven},carpaHofbrau.asistentesQueNoBebieron())
+	}
+	
+	test "Está entrando en el vicio" {
+		assert.equals(false,belgaJoven.EstaEntrandoEnElVicio()) 
+		assert.equals(true,belga.EstaEntrandoEnElVicio()) 
+		assert.equals(false,checoJoven.EstaEntrandoEnElVicio()) 
+		assert.equals(false,checo.EstaEntrandoEnElVicio()) 
+		assert.equals(false,alemanJoven.EstaEntrandoEnElVicio()) 
+		assert.equals(true,aleman.EstaEntrandoEnElVicio()) 
+	}
+	
+}
