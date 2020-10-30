@@ -2,9 +2,9 @@ import Jarras.*
 import Carpas.*
 
 class Persona {
-	const peso = 0
-	const nivelDeAguante = 0
-	const property leGustaMasicaTradicional = null
+	const property peso = 0
+	const property nivelDeAguante = 0
+	const property leGustaMasicaTrad = null
 	const property pais = null
 	const property jarras = []
 	const property marcas = #{}
@@ -14,12 +14,11 @@ class Persona {
 	method comprarJarra(unaJarra) { jarras.add(unaJarra) }
 	method leGustaMarca(unaMarca) = true
 	method quiereEntrarACarpa(unaCarpa) { 
-	    return self.leGustaMarca(unaCarpa.marca()) && 
-	    leGustaMasicaTradicional == unaCarpa.bandaDeMusicaTradicional()
+	    return self.leGustaMarca(unaCarpa.marcaQueVende()) && 
+	    leGustaMasicaTrad == unaCarpa.bandaDeMusicaTradicional()
 	}
 	method puedeEntrarACarpa(unaCarpa) = self.quiereEntrarACarpa(unaCarpa) && unaCarpa.dejaEntrarA(self)
 	method esEbrioEmperdernido() = jarras.all({ jar => jar.capasidadLts() >= 1 })
-	method entrarEnCarpa(unaCarpa) { unaCarpa.hacerEntrarPersona(self) }
 	method esPatriota() = jarras.all({ jar => jar.marca().pais() == self.pais() })
 	
 	method marcasProbadas() = jarras.map({ jar => jar.marca() }).asSet()
@@ -35,7 +34,7 @@ class Persona {
 
 class Belga inherits Persona {
 	
-	override method leGustaMarca(unaMarca) = unaMarca.lupuo() > 4 
+	override method leGustaMarca(unaMarca) = unaMarca.lupulo() > 4 
 	override method pais() = "Belgica"
 }
 
@@ -47,10 +46,8 @@ class Checo inherits Persona {
 }
 
 class Aleman inherits Persona {
-     const minimoDeGenteEnCarpa = 0
      
      override method quiereEntrarACarpa(unaCarpa) = 
-     super(unaCarpa) && unaCarpa.personas().size() >= minimoDeGenteEnCarpa
-     override method pais() = "Alemania"
+     super(unaCarpa) && unaCarpa.personas().size().even()
 
 }

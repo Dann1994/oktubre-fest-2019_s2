@@ -6,17 +6,17 @@ import Carpas.*
 describe "Oktobre fest" {
 
 	/**Cervezas */
-	const corona  = new Rubia(lupuo = 6, graduacion = 0.05, pais = "Mexico")
-	const guinness = new Negra(lupuo = 8, pais = "Irlanda")
-	const hofbrau = new Roja(lupuo = 6, pais = "Alemania") 
+	const corona  = new Rubia(lupulo = 6, graduacion = 0.05, pais = "Mexico")
+	const guinness = new Negra(lupulo = 8, pais = "Irlanda")
+	const hofbrau = new Roja(lupulo = 8, pais = "Alemania") 
 	
 	/**personas*/
-	const belgaJoven = new Belga(peso = 65, leGustaMasicaTradicional = false, nivelDeAguante = 80)
-	const belga  = new Belga(peso = 85, leGustaMasicaTradicional = true, nivelDeAguante = 90)
-	const checoJoven  = new Checo(peso = 75, leGustaMasicaTradicional = true, nivelDeAguante = 60)
-	const checo  = new Checo(peso = 68, leGustaMasicaTradicional = false, nivelDeAguante = 50)
-	const alemanJoven = new Aleman(peso = 80, leGustaMasicaTradicional = true, nivelDeAguante = 90, minimoDeGenteEnCarpa = 0)
-	const aleman = new Aleman(peso = 98, leGustaMasicaTradicional = true, nivelDeAguante = 100, minimoDeGenteEnCarpa = 1)
+	const belgaJoven = new Belga(peso = 65, leGustaMasicaTrad = false, nivelDeAguante = 80)
+	const belga  = new Belga(peso = 85, leGustaMasicaTrad = true, nivelDeAguante = 90)
+	const checoJoven  = new Checo(peso = 75, leGustaMasicaTrad = true, nivelDeAguante = 60)
+	const checo  = new Checo(peso = 68, leGustaMasicaTrad = true, nivelDeAguante = 50)
+	const alemanJoven = new Aleman(peso = 80, leGustaMasicaTrad = true, nivelDeAguante = 90)
+	const aleman = new Aleman(peso = 98, leGustaMasicaTrad = true, nivelDeAguante = 100)
 	
 	/**Jarras */
 	const jarraCoronaChica  = new Jarra(capasidadLts = 1, marca = corona)
@@ -29,36 +29,35 @@ describe "Oktobre fest" {
 	const jarraHofbrauGrande = new Jarra(capasidadLts = 2.25, marca = hofbrau)
 	
 	/**Carpas */
-	const carpaCorona = new Carpa(limiteDeGente = 15, bandaDeMusicaTradicional = false, marca = corona)
-	const carpaGuinness = new Carpa(limiteDeGente = 20, bandaDeMusicaTradicional = false, marca = guinness)
-	const carpaHofbrau = new Carpa(limiteDeGente = 35, bandaDeMusicaTradicional = true, marca = hofbrau)
+	const carpaCorona = new Carpa(limiteDeGente = 15, bandaDeMusicaTradicional = false, marcaQueVende = corona)
+	const carpaGuinness = new Carpa(limiteDeGente = 20, bandaDeMusicaTradicional = false, marcaQueVende = guinness)
+	const carpaHofbrau = new Carpa(limiteDeGente = 35, bandaDeMusicaTradicional = true, marcaQueVende = hofbrau)
 	
 	fixture {
         
-        belgaJoven.entrarEnCarpa(carpaCorona)
-        belgaJoven.entrarEnCarpa(carpaGuinness)
+        carpaCorona.hacerEntrarPersona(belgaJoven)
+        carpaGuinness.hacerEntrarPersona(belgaJoven)
         
-		belga.entrarEnCarpa(carpaHofbrau)
+		carpaHofbrau.hacerEntrarPersona(belga)
 		
-		checoJoven.entrarEnCarpa(carpaHofbrau)
-		checo.entrarEnCarpa(carpaGuinness)
+	    carpaHofbrau.hacerEntrarPersona(checoJoven)
 		
-		alemanJoven.entrarEnCarpa(carpaHofbrau)
+		carpaHofbrau.hacerEntrarPersona(alemanJoven)
 		
-		aleman.entrarEnCarpa(carpaHofbrau)
+		carpaHofbrau.hacerEntrarPersona(checo)
+		
+		carpaHofbrau.hacerEntrarPersona(aleman)
 		
 		
 		assert.throwsException {
-			belgaJoven.entrarEnCarpa(carpaHofbrau)
 			
-		    belga.entrarEnCarpa(carpaCorona)
-		    belga.entrarEnCarpa(carpaGuinness)
+			carpaHofbrau.hacerEntrarPersona(belgaJoven)
+			
+		    carpaCorona.hacerEntrarPersona(belga)
+		    carpaGuinness.hacerEntrarPersona(belga)
 		    
-		    checo.entrarEnCarpa(carpaCorona)
-		    checo.entrarEnCarpa(carpaHofbrau)
-		   
-		    alemanJoven.entrarEnCarpa(carpaCorona)
-		    alemanJoven.entrarEnCarpa(carpaGuinness)
+		    carpaCorona.hacerEntrarPersona(checo)
+		    carpaGuinness.hacerEntrarPersona(checo)
 		    
 		    aleman.entrarEnCarpa(carpaCorona)
 		    aleman.entrarEnCarpa(carpaGuinness)
@@ -69,8 +68,8 @@ describe "Oktobre fest" {
 		carpaHofbrau.servirJarraDe_LtsA(1, belga)
 		carpaHofbrau.servirJarraDe_LtsA(1, belga)
 		
-		carpaGuinness.servirJarraDe_LtsA(2, checo)
-		carpaGuinness.servirJarraDe_LtsA(1, checo)
+		carpaHofbrau.servirJarraDe_LtsA(2, checo)
+		carpaHofbrau.servirJarraDe_LtsA(1, checo)
 		
 		carpaHofbrau.servirJarraDe_LtsA(1.50, aleman)
 		carpaHofbrau.servirJarraDe_LtsA(2.25, aleman)
@@ -98,7 +97,7 @@ describe "Oktobre fest" {
 		
 		assert.equals(0,checoJoven.alcohoInegrido())
 		
-		assert.equals(0.45,checo.alcohoInegrido())
+		assert.equals(0.5625,checo.alcohoInegrido())
 		
 		assert.equals(0,alemanJoven.alcohoInegrido())
 		
@@ -157,8 +156,8 @@ describe "Oktobre fest" {
 		assert.equals(false,belgaJoven.quiereEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,checo.quiereEntrarACarpa(carpaCorona))
-		assert.equals(true,checo.quiereEntrarACarpa(carpaGuinness))
-		assert.equals(false,checo.quiereEntrarACarpa(carpaHofbrau))
+		assert.equals(false,checo.quiereEntrarACarpa(carpaGuinness))
+		assert.equals(true,checo.quiereEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,checoJoven.quiereEntrarACarpa(carpaCorona))
 		assert.equals(false,checoJoven.quiereEntrarACarpa(carpaGuinness))
@@ -166,11 +165,11 @@ describe "Oktobre fest" {
 		
 		assert.equals(false,aleman.quiereEntrarACarpa(carpaCorona))
 		assert.equals(false,aleman.quiereEntrarACarpa(carpaGuinness))
-		assert.equals(true,aleman.quiereEntrarACarpa(carpaHofbrau))
+		assert.equals(false,aleman.quiereEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,alemanJoven.quiereEntrarACarpa(carpaCorona))
 		assert.equals(false,alemanJoven.quiereEntrarACarpa(carpaGuinness))
-		assert.equals(true,alemanJoven.quiereEntrarACarpa(carpaHofbrau))
+		assert.equals(false,alemanJoven.quiereEntrarACarpa(carpaHofbrau))
 		
 	}
 	
@@ -215,12 +214,12 @@ describe "Oktobre fest" {
 		assert.equals(true,checoJoven.puedeEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,checo.puedeEntrarACarpa(carpaCorona))
-		assert.equals(true,checo.puedeEntrarACarpa(carpaGuinness))
-		assert.equals(false,checo.puedeEntrarACarpa(carpaHofbrau))
+		assert.equals(false,checo.puedeEntrarACarpa(carpaGuinness))
+		assert.equals(true,checo.puedeEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,alemanJoven.puedeEntrarACarpa(carpaCorona))
 		assert.equals(false,alemanJoven.puedeEntrarACarpa(carpaGuinness))
-		assert.equals(true,alemanJoven.puedeEntrarACarpa(carpaHofbrau))
+		assert.equals(false,alemanJoven.puedeEntrarACarpa(carpaHofbrau))
 		
 		assert.equals(false,aleman.puedeEntrarACarpa(carpaCorona))
 		assert.equals(false,aleman.puedeEntrarACarpa(carpaGuinness))
@@ -234,18 +233,18 @@ describe "Oktobre fest" {
 		assert.equals(true,alemanJoven.esPatriota())
 		assert.equals(false,belga.esPatriota())
 		assert.equals(false,checo.esPatriota())
-		assert.equals(true,aleman.esPatriota())
+		assert.equals(false,aleman.esPatriota())
 	} 
 	
 	test "Son compatibles" {
-		assert.equals(false,belga.esCompatibleCon(checo))
+		assert.equals(true,belga.esCompatibleCon(checo))
 		assert.equals(true,belga.esCompatibleCon(aleman))
-		assert.equals(false,checo.esCompatibleCon(aleman))
+		assert.equals(true,checo.esCompatibleCon(aleman))
 	}
 	
 	test "Es homegénea" {
 		assert.equals(true,carpaCorona.esHomogenea()) 
-		assert.equals(false,carpaGuinness.esHomogenea())
+		assert.equals(true,carpaGuinness.esHomogenea())
 		assert.equals(false,carpaHofbrau.esHomogenea())
 	}
 	
@@ -254,7 +253,7 @@ describe "Oktobre fest" {
 		assert.equals(#{},checoJoven.carpasDondeBebio())
 		assert.equals(#{},alemanJoven.carpasDondeBebio())
 		assert.equals(#{carpaHofbrau},belga.carpasDondeBebio())
-		assert.equals(#{carpaGuinness},checo.carpasDondeBebio())
+		assert.equals(#{carpaHofbrau},checo.carpasDondeBebio())
 		assert.equals(#{carpaHofbrau},aleman.carpasDondeBebio())
 	}
 	

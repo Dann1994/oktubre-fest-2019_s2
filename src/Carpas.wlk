@@ -2,22 +2,23 @@ import Jarras.*
 import Personas.*
 
 class Carpa {
-	const property personas = #{}
-	const property limiteDeGente = 0
-	const property bandaDeMusicaTradicional = null
-	const property marca = null
+	var property personas = #{}
+	var property limiteDeGente = 0
+	var property bandaDeMusicaTradicional = null
+	var property marcaQueVende = null
 	
-	method dejaEntrarA(unaPersona) = personas.size() < limiteDeGente && not unaPersona.estaEbrio()
+	method dejaEntrarA(unaPersona) = self.cantDePersonas() < limiteDeGente && not unaPersona.estaEbrio()
+	method cantDePersonas() = personas.size()
 	method hacerEntrarPersona(unaPersona) {
-		if (self.dejaEntrarA(unaPersona) && unaPersona.quiereEntrarACarpa(self)) {
+		if (unaPersona.puedeEntrarACarpa(self)) {
 			personas.add(unaPersona)
 		} else {
-			self.error("limite exedido")
+			self.error("No puede entrar")
 		}
 	}
 	method servirJarraDe_LtsA(lts, unaPersona) { 
 		if (personas.contains(unaPersona)) {
-			unaPersona.comprarJarra(new Jarra(capasidadLts = lts, marca = marca, carpa = self))
+			unaPersona.comprarJarra(new Jarra(capasidadLts = lts, marca = marcaQueVende, carpa = self))
 		} else {
 			self.error("Esa persona no está en la carpa")
 		}

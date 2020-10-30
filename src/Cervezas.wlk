@@ -1,19 +1,25 @@
 class Cerveza {
-	const property lupuo = 0
+	const property lupulo = 0
 	const property pais = null
-	var property graduacionReglamentaria = 0.15
+	
+	method graduacion()
 }
 
 class Rubia inherits Cerveza {
 	const property graduacion = 0
 }
 
+
 class Negra inherits Cerveza {
 	
-	method graduacion() = graduacionReglamentaria.min(lupuo * 2)
+	override method graduacion() = graduacionReglamentaria.graduacion().min(lupulo * 2)
 }
 
 class Roja inherits Negra {
 	
 	override method graduacion() = super() * 1.25
+}
+
+object graduacionReglamentaria {
+	var property graduacion = 0.15
 }
